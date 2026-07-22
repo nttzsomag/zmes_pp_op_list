@@ -1,0 +1,41 @@
+{
+    "fileName": "hide_share_button",
+    "fileType": "change",
+    "changeType": "propertyChange",
+    "moduleName": "",
+    "reference": "zmes.zmesppoplist",
+    "packageName": "",
+    "content": {
+        "property": "visible",
+        "newValue": false
+    },
+    "selector": {
+        "id": "zmes.zmesppoplist::SessionObjectPage--fe::Share",
+        "idIsLocal": false,
+        "type": "sap.m.MenuButton"
+    },
+    "layer": "CUSTOMER_BASE",
+    "texts": {},
+    "namespace": "apps/zmes.zmesppoplist/changes/",
+    "projectId": "",
+    "creation": 1782987994335,
+    "originalLanguage": "",
+    "support": {
+        "generator": "changeUtils: SAPFioriTools",
+        "service": "",
+        "user": "",
+        "sapui5Version": "1.71.58",
+        "sourceChangeFileName": "",
+        "compositeCommand": ""
+    },
+    "oDataInformation": {},
+    "dependentSelector": {},
+    "validAppVersions": {
+        "from": "0.0.1",
+        "to": "0.0.1",
+        "creation": "0.0.1"
+    },
+    "jsOnly": false,
+    "variantReference": "",
+    "appDescriptorChange": false
+}
