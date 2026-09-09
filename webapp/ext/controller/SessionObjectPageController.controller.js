@@ -1,8 +1,16 @@
 sap.ui.define([
   "sap/ui/core/mvc/ControllerExtension",
   "sap/m/MessageToast",
+  "sap/m/Dialog",
+  "sap/m/Table",
+  "sap/m/Column",
+  "sap/m/ColumnListItem",
+  "sap/m/ObjectIdentifier",
+  "sap/m/Button",
+  "sap/m/Text",
+  "sap/ui/model/Filter",
   "zmes/zmesppoplist/ext/controller/ScanHandler"
-], function (ControllerExtension, MessageToast, ScanHandler) {
+], function (ControllerExtension, MessageToast, Dialog, Table, Column, ColumnListItem, ObjectIdentifier, Button, Text, Filter, ScanHandler) {
   "use strict";
 
   return ControllerExtension.extend("zmes.zmesppoplist.ext.controller.SessionObjectPageController", {
@@ -22,19 +30,67 @@ sap.ui.define([
         ScanHandler.onClearScan = function () {
           this._onScanResult("");
         }.bind(this);
-      },
-
-/*editFlow: {
-  invokeAction: function (sAction, mParameters) {
-    console.log("invokeAction:", sAction);
-    var that = this;
-    return this.base.editFlow.invokeAction(sAction, mParameters).then(function () {
-      if (sAction.endsWith("changeWorkCenter")) {
-        that.getExtensionAPI().refresh();
       }
-    });
-  }
-}*/
+    },
+
+    // ====== Csatolt dokumentumok - soronkénti ikon a _Operations táblában ======
+    onShowGosDocuments: function (oEvent) {
+      var oRowContext = oEvent.getSource().getBindingContext();
+      if (!oRowContext) {
+        console.warn("### DEBUG: onShowGosDocuments - nincs sor kontextus");
+        return;
+      }
+
+      oRowContext.requestProperty(["Material", "ProductDocumentNumber"]).then(function (aValues) {
+        var sMaterial = aValues[0];
+        var sProductDocumentNumber = aValues[1];
+
+        var oTable = new Table({
+          columns: [
+            new Column({ header: new Text({ text: "Leírás" }) }),
+            new Column({ header: new Text({ text: "Létrehozva" }) })
+          ]
+        });
+
+        oTable.bindItems({
+          path: "/GosUrlLink",
+          model: "gosModel",
+          filters: [
+            new Filter("BoObjType", "EQ", "BUS1001006"),
+            new Filter("BoObjKey", "EQ", sMaterial),
+            new Filter("DescriptionUpper", "EQ", sProductDocumentNumber)
+          ],
+          parameters: {
+            $select: "GuidId,Description,CreatedOn,Url"
+          },
+          template: new ColumnListItem({
+            type: "Active",
+            press: function (oItemEvent) {
+              var oCtx = oItemEvent.getSource().getBindingContext("gosModel");
+              var sUrl = oCtx.getProperty("Url");
+              window.open(sUrl, "_blank");
+            },
+            cells: [
+              new ObjectIdentifier({ title: "{gosModel>Description}" }),
+              new Text({ text: "{gosModel>CreatedOn}" })
+            ]
+          })
+        });
+
+        var oDialog = new Dialog({
+          title: "Csatolt dokumentumok",
+          contentWidth: "30rem",
+          content: [oTable],
+          beginButton: new Button({
+            text: "Bezár",
+            press: function () { oDialog.close(); }
+          }),
+          afterClose: function () { oDialog.destroy(); }
+        });
+
+        oEvent.getSource().addDependent(oDialog);
+        oDialog.open();
+      });
     },
 
     _onScanResult: function (sBarcode) {

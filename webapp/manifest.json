@@ -33,6 +33,14 @@
           "localUri": "localService/mainService/metadata.xml",
           "odataVersion": "4.0"
         }
+      },
+      "gosService": {
+        "uri": "/sap/opu/odata4/sap/zui_gos_url_link_v4/srvd/sap/zui_gos_url_link/0001/",
+        "type": "OData",
+        "settings": {
+          "localUri": "localService/gosService/metadata.xml",
+          "odataVersion": "4.0"
+        }
       }
     },
     "crossNavigation": {
@@ -112,8 +120,6 @@
         "sap.fe.templates": {}
       }
     },
-
-    
     "contentDensities": {
       "compact": true,
       "cozy": true
@@ -134,6 +140,13 @@
           "earlyRequests": true
         }
       },
+      "gosModel": {
+        "dataSource": "gosService",
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true
+        }
+      },
       "@i18n": {
         "type": "sap.ui.model.resource.ResourceModel",
         "uri": "i18n/i18n.properties"
@@ -142,10 +155,6 @@
     "resources": {
       "css": []
     },
-
-
-
-
     "routing": {
       "config": {},
       "routes": [
@@ -200,9 +209,20 @@
                       "enabled": true,
                       "visible": false
                     }
+                  },
+                  "columns": {
+                    "gosColumn": {
+                      "header": "Dok.",
+                      "width": "3rem",
+                      "position": {
+                        "placement": "After",
+                        "anchor": "DataField::Material"
+                      },
+                      "template": "zmes.zmesppoplist.ext.fragment.GosColumn"
+                    }
                   }
                 },
-                                "_AppNav/@com.sap.vocabularies.UI.v1.LineItem": {
+                "_AppNav/@com.sap.vocabularies.UI.v1.LineItem": {
                   "tableSettings": {
                     "enableExport": false
                   }
@@ -232,11 +252,9 @@
   "sap.fe": {
     "app": {
       "enableLazyLoading": true,
-
       "share": {
-      "showSendEmail": false
-    }
-
+        "showSendEmail": false
+      }
     }
   }
 }
