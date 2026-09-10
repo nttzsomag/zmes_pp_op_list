@@ -158,15 +158,23 @@ sap.ui.define([
       var oBindingContext = oEvent.getParameter("bindingContext");
       if (!oBindingContext) return;
 
-      oBindingContext.requestProperty(["ToSemObj", "ToSemAction"])
+      oBindingContext.requestProperty(["ToSemObj", "ToSemAction", "ToGroupId"])
         .then(function (aValues) {
           var sToSemObj = aValues[0];
           var sToSemAction = aValues[1];
-          if (sToSemObj && sToSemAction) {
-            sap.ushell.Container.getService("CrossApplicationNavigation").toExternal({
-              target: { semanticObject: sToSemObj, action: sToSemAction }
-            });
+          var sToGroupId = aValues[2];
+
+          if (!sToSemObj || !sToSemAction) return;
+
+          var oNavArgs = {
+            target: { semanticObject: sToSemObj, action: sToSemAction }
+          };
+
+          if (sToGroupId) {
+            oNavArgs.params = { GroupId: sToGroupId };
           }
+
+          sap.ushell.Container.getService("CrossApplicationNavigation").toExternal(oNavArgs);
         });
     }
   });
