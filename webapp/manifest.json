@@ -100,7 +100,6 @@
       "phone": true
     }
   },
-
   "sap.ui5": {
     "flexEnabled": true,
     "extends": {
@@ -212,13 +211,22 @@
                   },
                   "columns": {
                     "gosColumn": {
-                      "header": "Dok.",
+                      "header": "Műszaki rajz",
                       "width": "3rem",
                       "position": {
                         "placement": "After",
                         "anchor": "DataField::Material"
                       },
                       "template": "zmes.zmesppoplist.ext.fragment.GosColumn"
+                    },
+                    "equipmentColumn": {
+                      "header": "Karb.",
+                      "width": "3rem",
+                      "position": {
+                        "placement": "After",
+                        "anchor": "DataField::WorkCenterID"
+                      },
+                      "template": "zmes.zmesppoplist.ext.fragment.EquipmentColumn"
                     }
                   }
                 },

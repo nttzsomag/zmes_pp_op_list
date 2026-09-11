@@ -5,7 +5,7 @@
     id="gosDocumentsButton"
     icon="sap-icon://attachment"
     type="Transparent"
-    tooltip="Csatolt dokumentumok"
+    tooltip="Műszaki rajz"
     press=".extension.zmes.zmesppoplist.ext.controller.SessionObjectPageController.onShowGosDocuments"
   />
 </core:FragmentDefinition>
