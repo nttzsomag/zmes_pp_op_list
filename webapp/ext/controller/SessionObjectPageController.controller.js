@@ -108,57 +108,6 @@ sap.ui.define([
       }.bind(this));
     },
 
-    // ====== Karbantartási utasítás - berendezéshez (EQUI) kötve ======
-    onShowMaintenanceInstruction: function (oEvent) {
-      var oSource = oEvent.getSource();
-      var oRowContext = oSource.getBindingContext();
-      if (!oRowContext) {
-        console.warn("### DEBUG: onShowMaintenanceInstruction - nincs sor kontextus");
-        return;
-      }
-
-      console.log("[MaintenanceInstruction] sor path:", oRowContext.getPath());
-
-      var oModel = oRowContext.getModel();
-      var oEquipmentBinding = oModel.bindList(oRowContext.getPath() + "/_Equipment", undefined, undefined, undefined, {
-        $select: "EquiEqunr"
-      });
-
-      oEquipmentBinding.requestContexts().then(function (aContexts) {
-        console.log("[MaintenanceInstruction] _Equipment találatok száma:", aContexts.length);
-
-        var aEquipmentIds = aContexts
-          .map(function (oCtx) {
-            var sVal = oCtx.getProperty("EquiEqunr");
-            var sPadded = sVal ? ("000000000000000000" + sVal).slice(-18) : sVal;
-            console.log("[MaintenanceInstruction] EquiEqunr érték:", JSON.stringify(sVal), "-> paddelve:", sPadded);
-            return sPadded;
-          })
-          .filter(Boolean);
-
-        console.log("[MaintenanceInstruction] végleges equipment ID lista:", aEquipmentIds);
-
-        if (!aEquipmentIds.length) {
-          MessageToast.show("Nincs berendezés rendelve ehhez a munkahelyhez.");
-          return;
-        }
-
-        var oEquipmentFilter = new Filter({
-          filters: aEquipmentIds.map(function (sEquipmentId) {
-            return new Filter("BoObjKey", "EQ", sEquipmentId);
-          }),
-          and: false
-        });
-
-        this._showGosDocumentsDialog(oSource, [
-          new Filter("BoObjType", "EQ", "EQUI"),
-          oEquipmentFilter
-        ], "Karbantartási utasítás");
-      }.bind(this)).catch(function (oError) {
-        console.log("[SessionObjectPageController] hiba a berendezések lekérésekor:", oError);
-      });
-    },
-
     _onScanResult: function (sBarcode) {
       var oClearBtn = sap.ui.getCore().byId(
         "zmes.zmesppoplist::SessionObjectPage--fe::table::_Operations::LineItem::CustomAction::clearScan"

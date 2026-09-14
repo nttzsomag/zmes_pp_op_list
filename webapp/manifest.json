@@ -218,15 +218,6 @@
                         "anchor": "DataField::Material"
                       },
                       "template": "zmes.zmesppoplist.ext.fragment.GosColumn"
-                    },
-                    "equipmentColumn": {
-                      "header": "Karb.",
-                      "width": "3rem",
-                      "position": {
-                        "placement": "After",
-                        "anchor": "DataField::WorkCenterID"
-                      },
-                      "template": "zmes.zmesppoplist.ext.fragment.EquipmentColumn"
                     }
                   }
                 },
