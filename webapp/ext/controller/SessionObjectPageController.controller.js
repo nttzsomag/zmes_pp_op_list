@@ -136,12 +136,18 @@ sap.ui.define([
       }
 
       var oModel = this.getView().getModel();
-      var sSessionPath = this.getView().getBindingContext().getPath();
 
+      // FONTOS: a resolveScan a top-level "Operation" entity set-hez van kötve
+      // (static function a RAP-ban), NEM a Session "_Operations" navigációján
+      // keresztül érhető el. Ezért itt nem a Session kontextus path-ját
+      // használjuk, hanem közvetlenül "/Operation"-t.
       var oOperation = oModel.bindContext(
-        sSessionPath + "/_Operations/com.sap.gateway.srvd.zui_mes_pp_operation.v0001.resolveScan(...)"
+        "/Operation/com.sap.gateway.srvd.zui_mes_pp_operation.v0001.resolveScan(...)"
       );
       oOperation.setParameter("barcode_value", sBarcode);
+      // A metaadat szerint az equipment_id is kötelező paraméter - ha nincs
+      // konkrét értékünk hozzá, üres stringgel töltjük ki.
+      oOperation.setParameter("equipment_id", "");
 
       oOperation.execute().then(function () {
         var aResults = oOperation.getBoundContext().getObject().value;
